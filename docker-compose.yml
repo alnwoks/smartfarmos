@@ -1,0 +1,23 @@
+version: '2'
+services: 
+  db:
+    image: mariadb
+    restart: always
+    volumes: 
+      - './mariadb/conf:/etc/mysql'
+    env_file: 
+      - database.env
+    ports:
+    - '3306:3306'
+
+  www:
+    image: farmos/farmos:7.x-1.7
+    restart: always
+    depends_on: 
+      - db
+    volumes:
+      - './sites:/var/www/html/sites'
+      - './php.ini:/usr/local/etc/php/conf.d/farmos.ini'
+      - './php-custom.ini:/usr/local/etc/php/conf.d/php-custom.ini'
+    ports:
+      - '80:80'
